@@ -44,13 +44,13 @@
 cd vagaped && python manage.py runserver
 ```
 
-  6. Open http://localhost:8000 in your browser
+  6. Open http://localhost:8000/ in your browser
 
 
 
 ## Employee manager Admin
 
-1. Open http://localhost:8000/admin in your browser
+1. Open http://localhost:8000/admin/ in your browser
 
 2. Credentials
 
