@@ -10,7 +10,10 @@ class Department(models.Model):
 class Employee(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField()
-    department = models.ForeignKey(Department,
+    department = models.ForeignKey(Department,related_name='department',
                                    on_delete=models.PROTECT)
     def __str__(self):
         return  self.name
+
+    def __unicode__(self):
+        return '%s' % ( self.title)

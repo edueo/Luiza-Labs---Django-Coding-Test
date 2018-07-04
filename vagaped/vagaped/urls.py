@@ -15,7 +15,30 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import include, url
+
+from rest_framework import routers, serializers, viewsets
+from employeemanager.models import Employee
+
+class EmployeeSerializer(serializers.ModelSerializer):
+    department = serializers.StringRelatedField(many=False)
+
+    class Meta:
+        model = Employee
+        fields = ('name', 'email', 'department')
+
+class EmployeeViewSet(viewsets.ModelViewSet):
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeSerializer
+
+router = routers.DefaultRouter()
+router.register(r'employee', EmployeeViewSet)
+
+
+
 
 urlpatterns = [
+    url(r'^', include(router.urls)),
     path('admin/', admin.site.urls),
+    url(r'^api-auth/', include('rest_framework.urls'))
 ]
