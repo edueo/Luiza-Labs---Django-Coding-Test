@@ -18,14 +18,36 @@ from django.urls import path
 from django.conf.urls import include, url
 
 from rest_framework import routers, serializers, viewsets
-from employeemanager.models import Employee
+from employeemanager.models import Employee, Department
+
+class DepartmentSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Department
+        fields = ('title', ) 
 
 class EmployeeSerializer(serializers.ModelSerializer):
-    department = serializers.StringRelatedField(many=False)
+    #department = serializers.StringRelatedField(many=False)
+    
+    
+    department = DepartmentSerializer(many=False)
 
     class Meta:
         model = Employee
         fields = ('name', 'email', 'department')
+    
+    def create(self, validated_data):
+        department = validated_data.pop('department')
+        department = Department.objects.create(title=department['title'])
+        
+        name = validated_data.pop('name')
+        email = validated_data.pop('email')
+
+        employee = Employee.objects.create(name=name, email=email,
+                                           department_id=department.id)
+        return employee
+
+
 
 class EmployeeViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
